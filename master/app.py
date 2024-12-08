@@ -1,13 +1,12 @@
 # master/app.py
 import os
 from flask import Flask, jsonify, request
-from couchdb import Server
 
 app = Flask(__name__)
 
 # CouchDB Connection
-COUCHDB_URL = os.environ.get("COUCHDB_URL", "http://localhost:5984")
-DB_NAME = os.environ.get("DB_NAME", "movie_similarities")
+# COUCHDB_URL = os.environ.get("COUCHDB_URL", "http://localhost:5984")
+# DB_NAME = os.environ.get("DB_NAME", "movie_similarities")
 USE_DUMMY_DATA = os.environ.get("USE_DUMMY_DATA", "false").lower() == "true"
 
 dummy_data = {
@@ -29,15 +28,15 @@ dummy_data = {
 
 
 def get_db_connection():
-    if USE_DUMMY_DATA:
-        return dummy_data
-    try:
-        server = Server(COUCHDB_URL)
-        db = server[DB_NAME]
-        return db
-    except Exception as e:
-        app.logger.error(f"Database connection error: {e}")
-        return None
+    # if USE_DUMMY_DATA:
+    return dummy_data
+    # try:
+    #     server = Server(COUCHDB_URL)
+    #     db = server[DB_NAME]
+    #     return db
+    # except Exception as e:
+    #     app.logger.error(f"Database connection error: {e}")
+    #     return None
 
 
 @app.route("/similar_movies/<int:movie_id>", methods=["GET"])
@@ -48,11 +47,7 @@ def get_similar_movies(movie_id):
 
     try:
         # Assuming movie similarities are stored with movie_id as key
-        doc = (
-            db.get(str(movie_id))
-            if not USE_DUMMY_DATA
-            else dummy_data.get(str(movie_id))
-        )
+        doc = dummy_data.get(str(movie_id))
 
         if not doc:
             return jsonify({"error": "Movie not found"}), 404
