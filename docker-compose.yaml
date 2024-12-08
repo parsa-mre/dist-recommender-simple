@@ -11,6 +11,4 @@ services:
             - GUNICORN_THREADS=2
             - GUNICORN_TIMEOUT=120
             - GUNICORN_WORKER_CLASS=gevent
-        networks:
-            - rec_network
         restart: always
