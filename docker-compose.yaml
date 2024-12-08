@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+    movie-similarity-service:
+        build:
+            context: .
+            dockerfile: Dockerfile.production
+        ports:
+            - "5000:5000"
+        environment:
+            - DB_NAME=movie_similarities
+            - GUNICORN_WORKERS=3
+            - GUNICORN_THREADS=2
+            - GUNICORN_TIMEOUT=120
+            - GUNICORN_WORKER_CLASS=gevent
+        restart: always
